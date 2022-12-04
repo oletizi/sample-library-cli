@@ -3,8 +3,8 @@
 A terminal-based user interface for [@oletizi/sample-library-manager](https://github.com/oletizi/sample-library-manager).
 
 ### CI
-![build-and-test](https://github.com/oletizi/sample-library-cli/actions/workflows/build-and-test.yaml/badge.svg)
-<!--[![<ORG_NAME>](https://circleci.com/gh/oletizi/sample-library-cli/tree/main.svg?style=shield)](https://circleci.com/gh/oletizi/sample-library-cli?branch=main)-->
+![build-and-test](https://github.com/oletizi/sample-library-cli/actions/workflows/build-and-test.yaml/badge.svg?branch=main)
+
 ### Coverage
 ![Branches](./badges/coverage-branches.svg)
 ![Functions](./badges/coverage-functions.svg)
