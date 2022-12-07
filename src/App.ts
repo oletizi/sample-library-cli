@@ -34,11 +34,15 @@ export class FilesystemAppFactory {
 
     const listOptions = {
       parent: layout,
-      label: ' Left ',
+      label: ' Library ',
       keys: true,
       style: {
         selected: {bg: 'blue'},
         item: {
+          fg: 'white'
+        },
+        border: {
+          type: 'line',
           fg: 'white'
         },
       },
