@@ -1,9 +1,13 @@
 import {Widgets} from "blessed"
+import {LibraryInfoView} from "./LibraryInfoView"
+import {ScreenView} from "./ScreenView"
+import {Logger} from "../Logger"
 
-export class LibraryListView {
+export class LibraryListView extends LibraryInfoView {
   private readonly list: Widgets.ListElement
 
-  constructor(list: Widgets.ListElement) {
+  constructor(logger: Logger, screen: ScreenView, label:string, list: Widgets.ListElement) {
+    super(logger, screen, label, list)
     this.list = list
   }
 
@@ -14,7 +18,4 @@ export class LibraryListView {
     }
   }
 
-  focus() {
-    this.list.focus()
-  }
 }
