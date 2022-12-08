@@ -39,7 +39,6 @@ export class LibraryInspectorController {
     })
 
     this.screenWidget.key(['f1'], () => {
-      logger.log('F1!!!!')
       this.libraryInfoLayout.toggleLogger()
     })
 

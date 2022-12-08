@@ -13,14 +13,12 @@ export abstract class AbstractLibraryInfoWidget extends Widget {
     this.label = label
     // set up focus and blur behavior
     widget.on('focus', () => {
-      logger.log(`FOCUS: ${label}`)
-      widget.border.fg = Colors.brightWhite
+      widget.style.border.fg = Colors.white
       widget.setLabel(`*${label}*`)
       screen.render()
     })
     widget.on('blur', () => {
-      logger.log(`BLUR: ${label}`)
-      widget.border.fg = Colors.gray
+      widget.style.border.fg = Colors.gray
       widget.setLabel(` ${label} `)
       screen.render()
     })

@@ -34,8 +34,6 @@ export class LibraryInfoLayout {
     this.itemWidget = itemWidget
     this.loggerView = loggerWidget
     this.mainMenu = this.currentMenu = mainMenu
-    //this.hideLogger()
-    //this.listWidget.setHeight('100%-' + mainMenu.getHeight())
     this.showLogger().layout()
   }
 
