@@ -9,20 +9,12 @@ export class LibraryListWidget extends AbstractLibraryInfoWidget {
   constructor(logger: Logger, screen: ScreenWidget, label: string, list: Widgets.ListElement) {
     super(logger, screen, label, list)
     this.list = list
-    // (item: BlessedElement, index: number)
-    list.on('select item', (item: Widgets.BlessedElement, index: number) => {
-      try {
-        logger.log(`select item! index: ${index}`)
-      } catch (e) {
-        logger.log(`${e}`)
-      }
-    })
   }
 
-  updateList(listData: string[]) {
+  updateList(listData: any[]) {
     this.list.clearItems()
     for (const item of listData) {
-      this.list.add(item)
+      this.list.add(item !== undefined ? item.toString() : "")
     }
   }
 

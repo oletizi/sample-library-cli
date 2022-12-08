@@ -28,6 +28,10 @@ export abstract class Widget {
     this.widget = widget
   }
 
+  protected render() {
+    this.screen.render()
+  }
+
   public key(keyName: any, listener: any) {
     this.widget.key(keyName, listener)
   }

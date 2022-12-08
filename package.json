@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@oletizi/sample-library-manager": "^1.0.2",
+    "async-mutex": "^0.4.0",
     "blessed": "^0.1.81"
   }
 }

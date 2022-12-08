@@ -6,6 +6,9 @@ import {LibraryItemWidget} from "../view/LibraryItemWidget"
 import {Logger} from "../Logger"
 import {LibraryInfoLayout} from "../view/LibraryInfoLayout"
 import {MenuWidget} from "../view/MenuWidget"
+import {Widgets} from "blessed"
+import {Mutex} from 'async-mutex'
+import {InfoView, LibraryNodeView, LibrarySampleView} from "../view/InfoView"
 
 export class LibraryInspectorController {
   private readonly library: Library
@@ -15,6 +18,9 @@ export class LibraryInspectorController {
   private readonly logger: Logger
   private readonly libraryInfoLayout: LibraryInfoLayout
   private readonly mainMenuWidget: MenuWidget
+  private currentNode: Node
+  private readonly currentListData: InfoView[] = []
+  private readonly listMutex = new Mutex()
 
   constructor(logger: Logger,
               library: Library,
@@ -25,12 +31,13 @@ export class LibraryInspectorController {
               mainMenuWidget: MenuWidget) {
     this.logger = logger
     this.library = library
+    this.currentNode = library.root
     this.screenWidget = screenWidget
     this.libraryInfoLayout = libraryInfoLayout
     this.libraryListWidget = libraryListWidget
     this.libraryItemWidget = libraryItemWidget
     this.mainMenuWidget = mainMenuWidget
-    this.updateList(this.library.root)
+    this.updateList(this.library.root).catch(e => logger.log(e))
     this.libraryListWidget.key('tab', () => {
       libraryItemWidget.focus()
     })
@@ -42,18 +49,30 @@ export class LibraryInspectorController {
       this.libraryInfoLayout.toggleLogger()
     })
 
+    libraryListWidget.on('select item', async (item: Widgets.BlessedElement, index: number) => {
+      try {
+        logger.log(`select item! index: ${index}`)
+        this.libraryItemWidget.setView(this.currentListData[index])
+      } catch (e) {
+        logger.log(`${e}`)
+      }
+    })
+
     libraryListWidget.focus()
   }
 
-  private updateList(node: Node) {
-    const listData: string[] = []
-    for (const child of node.children) {
-      listData.push(child.name + '/')
-    }
-    for (const sample of node.samples) {
-      listData.push(sample.name)
-    }
-    this.libraryListWidget.updateList(listData)
+  async updateList(node: Node) {
+    await this.listMutex.runExclusive(() => {
+      this.currentListData.length = 0
+      for (const child of node.children) {
+        this.currentListData.push(new LibraryNodeView(child))
+      }
+      for (const sample of node.samples) {
+        this.currentListData.push(new LibrarySampleView(sample))
+      }
+      this.libraryListWidget.updateList(this.currentListData)
+      this.screenWidget.render()
+    })
   }
 
   render() {
