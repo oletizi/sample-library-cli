@@ -1,14 +1,14 @@
-import {Colors, View} from "./View"
+import {Colors, Widget} from "./Widget"
 import {Widgets} from "blessed"
-import {ScreenView} from "./ScreenView"
+import {ScreenWidget} from "./ScreenWidget"
 import {Logger} from "../Logger"
 
 /**
  * Parent of all interactive panels.
  */
-export abstract class LibraryInfoView extends View {
+export abstract class AbstractLibraryInfoWidget extends Widget {
   private label: string
-  protected constructor(logger: Logger, screen: ScreenView, label: string, widget: Widgets.BlessedElement) {
+  protected constructor(logger: Logger, screen: ScreenWidget, label: string, widget: Widgets.BlessedElement) {
     super(logger, screen, widget)
     this.label = label
     // set up focus and blur behavior

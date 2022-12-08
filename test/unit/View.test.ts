@@ -1,4 +1,4 @@
-import {Colors} from "../../src/view/View"
+import {Colors} from "../../src/view/Widget"
 
 test('Test colors', () => {
   expect(Colors.brightWhite).toBe(-1)

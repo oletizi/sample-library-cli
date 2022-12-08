@@ -1,13 +1,16 @@
 import {FilesystemLibraryFactory} from "@oletizi/sample-library-manager/dist/LibraryFactory"
 import {Library} from "@oletizi/sample-library-manager/dist/Library"
 import {LibraryInspectorController} from "./controller/LibraryInspectorController"
-import {LibraryItemView} from "./view/LibraryItemView"
-import {LibraryListView} from "./view/LibraryListView"
+import {LibraryItemWidget} from "./view/LibraryItemWidget"
+import {LibraryListWidget} from "./view/LibraryListWidget"
 import * as blessed from 'blessed'
-import {ScreenView} from "./view/ScreenView"
+import {ScreenWidget} from "./view/ScreenWidget"
 import {Widgets} from "blessed"
 import Border = Widgets.Border
-import {Colors} from "./view/View"
+import {Colors} from "./view/Widget"
+import {LibraryInfoLayout} from "./view/LibraryInfoLayout"
+import {LoggerWidget} from "./view/LoggerWidget"
+import {MenuWidget} from "./view/MenuWidget"
 
 export interface App {
   readonly name: string
@@ -25,8 +28,9 @@ export class FilesystemAppFactory {
       process.exit(0)
     })
     screen.title = "I'm the Title"
+    //screen.on('keypress', (ch, key) => {console.log(`ch: ${ch}, key: ${JSON.stringify(key)}`)})
 
-    const screenView = new ScreenView(screen)
+    const screenWidget = new ScreenWidget(screen)
 
     const logger = blessed.log({
       label: ' Log ',
@@ -70,14 +74,12 @@ export class FilesystemAppFactory {
       },
       top: 0,
       left: 0,
-      width: '33%',
-      height: '100%',
       content: ''
     }
 
-    const libraryListView: LibraryListView = new LibraryListView(
+    const libraryListWidget: LibraryListWidget = new LibraryListWidget(
       logger,
-      screenView,
+      screenWidget,
       "Library",
       blessed.list(listOptions)
     )
@@ -85,19 +87,29 @@ export class FilesystemAppFactory {
     const infoOptions: Widgets.BoxOptions = {
       parent: layout,
       top: 0,
-      width: '33%',
-      height: '100%',
       border: {
         type: 'line',
         fg: Colors.gray,
       },
       content: "I'm the info pane."
     }
-    const libraryInfoView: LibraryItemView = new LibraryItemView(logger, screenView, "Info", blessed.box(infoOptions))
+    const libraryItemWidget: LibraryItemWidget = new LibraryItemWidget(logger, screenWidget, "Info", blessed.box(infoOptions))
 
+    const mainMenu = blessed.box({
+      parent: screen,
+      autoCommandKeys: true,
+      width: '100%',
+      height: 1,
+      bottom: 0,
+      content: " F1: Show Log "
+    })
+    const mainMenuWidget: MenuWidget = new MenuWidget(logger, screenWidget, mainMenu)
     layout.append(logger)
 
-    const controller = new LibraryInspectorController(logger, library, screenView, libraryListView, libraryInfoView)
+    const loggerWidget: LoggerWidget = new LoggerWidget(logger, screenWidget, logger)
+    const libraryInfoLayout: LibraryInfoLayout = new LibraryInfoLayout(logger, screenWidget, layout, libraryListWidget, libraryItemWidget, loggerWidget, mainMenuWidget)
+
+    const controller = new LibraryInspectorController(logger, library, screenWidget, libraryInfoLayout, libraryListWidget, libraryItemWidget, mainMenuWidget)
     return new MutableApp(name, controller)
   }
 }

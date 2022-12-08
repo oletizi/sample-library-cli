@@ -1,12 +1,12 @@
 import {Widgets} from "blessed"
-import {LibraryInfoView} from "./LibraryInfoView"
-import {ScreenView} from "./ScreenView"
+import {AbstractLibraryInfoWidget} from "./AbstractLibraryInfoWidget"
+import {ScreenWidget} from "./ScreenWidget"
 import {Logger} from "../Logger"
 
-export class LibraryListView extends LibraryInfoView {
+export class LibraryListWidget extends AbstractLibraryInfoWidget {
   private readonly list: Widgets.ListElement
 
-  constructor(logger: Logger, screen: ScreenView, label:string, list: Widgets.ListElement) {
+  constructor(logger: Logger, screen: ScreenWidget, label:string, list: Widgets.ListElement) {
     super(logger, screen, label, list)
     this.list = list
   }

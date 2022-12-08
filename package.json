@@ -8,6 +8,7 @@
     "start": "npx ts-node src/main.ts",
     "test": "jest --coverage",
     "test-ci": "jest --ci --coverage",
+    "integration": "npx ts-node test/integration/FilesystemIntegration.ts",
     "build": "tsc --project tsconfig.build.json",
     "publish": "npm run clean && npm run test-ci && npm run build && npm --access public publish",
     "clean": "rm -rf build coverage dist"

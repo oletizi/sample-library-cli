@@ -1,6 +1,6 @@
 import {Widgets} from 'blessed'
 
-import {ScreenView} from "./ScreenView"
+import {ScreenWidget} from "./ScreenWidget"
 import {Logger} from "../Logger"
 
 export class Colors {
@@ -17,12 +17,12 @@ export class Colors {
   static readonly brightWhite: number = -1
 }
 
-export abstract class View {
-  private readonly screen: ScreenView
+export abstract class Widget {
+  private readonly screen: ScreenWidget
   private readonly widget: Widgets.BlessedElement
   protected readonly logger: Logger
 
-  protected constructor(logger: Logger, screen: ScreenView, widget: Widgets.BlessedElement) {
+  protected constructor(logger: Logger, screen: ScreenWidget, widget: Widgets.BlessedElement) {
     this.logger = logger
     this.screen = screen
     this.widget = widget
@@ -37,8 +37,35 @@ export abstract class View {
     this.widget.on(eventName, listener)
   }
 
-  focus() {
+  public getWidth(): string | number {
+    return this.widget.width
+  }
+
+  public setWidth(width: string | number) {
+    this.widget.width = width
+  }
+
+  public getHeight(): string | number {
+    return this.widget.height
+  }
+
+  public setHeight(height: string | number) {
+    this.widget.height = height
+  }
+
+  public show() {
+    this.widget.show()
+  }
+
+  public hide() {
+    this.widget.hide()
+  }
+
+  public focus() {
     this.widget.focus()
   }
 
+  isVisible() {
+    return this.widget.visible
+  }
 }
