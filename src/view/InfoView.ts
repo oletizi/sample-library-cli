@@ -1,6 +1,7 @@
 import {Node} from "@oletizi/sample-library-manager/dist/Node"
 import {Sample} from "@oletizi/sample-library-manager/dist/Sample"
 import {MediaStreamMeta, SampleMeta} from "@oletizi/sample-library-manager/dist/SampleMeta"
+import {NodeMeta} from "@oletizi/sample-library-manager/dist/NodeMeta"
 
 export interface InfoView {
   info(): string
@@ -18,7 +19,7 @@ export class LibrarySampleView implements InfoView {
   }
 
   info(): string {
-    return new SampleMetaInfoView(this.sample.meta).info()
+    return `${this.sample.path}\n` + new SampleMetaInfoView(this.sample.meta).info()
   }
 }
 
@@ -30,7 +31,7 @@ class SampleMetaInfoView implements InfoView {
   }
 
   info(): string {
-    return "Keywords: " + Array.from(this.sampleMeta.keywords).join(',')
+    return "Keywords    : " + Array.from(this.sampleMeta.keywords).join(',')
       + '\n' + new MediaStreamsInfoView(this.sampleMeta.streams).info()
   }
 }
@@ -55,7 +56,12 @@ class MediaStreamInfoView implements InfoView {
   }
 
   info(): string {
-    return `Sample Rate: ${this.streamMeta.sampleRate}`
+    let rv = ""
+    rv += `Channels    : ${this.streamMeta.channels}\n`
+    rv += `Sample Rate : ${this.streamMeta.sampleRate}\n`
+    rv += `Bit Depth   : ${this.streamMeta.bitsPerSample}\n`
+    rv += `Duration    : ${this.streamMeta.duration}s`
+    return rv
   }
 }
 
@@ -71,6 +77,17 @@ export class LibraryNodeView implements InfoView {
   }
 
   info(): string {
-    return `I'm the library node info for node ${this.toString()}!`
+    return `${this.node.path}/\n` + new NodeMetaInfoView(this.node.meta).info()
+  }
+}
+
+class NodeMetaInfoView implements InfoView {
+  private meta: NodeMeta
+  constructor(meta: NodeMeta) {
+    this.meta = meta
+  }
+
+  info(): string {
+    return "Keywords: " + Array.from(this.meta.keywords).join(', ')
   }
 }
